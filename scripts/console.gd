@@ -361,4 +361,9 @@ func _input(event):
 		
 	if event.is_action_pressed("ui_focus_next"): 
 		_try_completion()
-
+	
+	if event is InputEventKey:
+		if event.keycode == KEY_PAGEDOWN and event.is_pressed(): 
+			console_text.get_v_scroll_bar().value += 10
+		if event.keycode == KEY_PAGEUP and event.is_pressed(): 
+			console_text.get_v_scroll_bar().value -= 10

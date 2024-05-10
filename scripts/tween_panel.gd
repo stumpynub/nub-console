@@ -137,6 +137,8 @@ func _test_show():
 func _input(event):
 	
 	if event is InputEventKey:
+		
+		
 		if !event.keycode == KEY_QUOTELEFT: 
 			return 
 			
@@ -147,4 +149,5 @@ func _input(event):
 		if event.is_pressed() && !is_hidden: 
 			hide_panel()
 			return 
+	
 
