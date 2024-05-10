@@ -87,7 +87,6 @@ func add_default_commands():
 	add_command("cd", "args: {node_name} \n traverse the scene tree", func() : 
 		if !target_object is Node: return 
 		var args = parse_args("cd")
-		
 		if args.size() > 0 and target_object.has_node(args[0]): 
 			var node: Node = self 
 			
@@ -251,7 +250,6 @@ func get_config_value(name, default):
 	return get_cfg().get_value("", name, default) 
 
 func _panel_shown(panel): 
-	print("shown")
 	line_edit.grab_focus.call_deferred()
 
 func _text_changed(text): 

@@ -9,10 +9,6 @@ extends Control
 @export var visible_pos: Vector2 
 @export var visible_rot: float 
 
-@export_group("actions")
-@export var show_action: String = ""
-@export var hide_action: String = ""
-
 @export_group("hide settings")
 @export var hide_time = 0.5
 @export var hide_speed_scale = 1.0
@@ -139,13 +135,16 @@ func _test_show():
 	show_panel()
 	
 func _input(event):
-	if show_action != "" and InputMap.has_action(show_action.strip_edges()): 
-		if event.is_action_pressed(show_action.strip_edges()) && is_hidden: 
-			show_panel()
+	
+	if event is InputEventKey:
+		if !event.keycode == KEY_QUOTELEFT: 
 			return 
 			
-	if hide_action != "" and InputMap.has_action(hide_action.strip_edges()):
-		if event.is_action_pressed(hide_action.strip_edges()) && !is_hidden: 
+		if event.is_pressed() and is_hidden: 
+			show_panel()
+			return 
+
+		if event.is_pressed() && !is_hidden: 
 			hide_panel()
 			return 
 
