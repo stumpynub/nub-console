@@ -1,6 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://cbf4kuyrc5686"]
+[gd_scene load_steps=15 format=3 uid="uid://cbf4kuyrc5686"]
 
 [ext_resource type="FontFile" uid="uid://ddfl11npi2r1t" path="res://addons/nub-console/fonts/MonaspaceNeon-SemiBold.otf" id="1_rbcnv"]
+[ext_resource type="FontFile" uid="uid://ckv3lfj6jhao8" path="res://addons/nub-console/fonts/MonaspaceNeon-ExtraLightItalic.otf" id="2_e6phw"]
 [ext_resource type="FontFile" uid="uid://bjs8jp0oe76hl" path="res://addons/nub-console/fonts/MonaspaceNeon-LightItalic.otf" id="2_ktccg"]
 [ext_resource type="FontFile" uid="uid://civ2ko045nlcr" path="res://addons/nub-console/fonts/MonaspaceNeon-ExtraLight.otf" id="3_ijrhk"]
 [ext_resource type="FontFile" uid="uid://bpvvgbl2446v8" path="res://addons/nub-console/fonts/MonaspaceNeon-Light.otf" id="4_3ud5r"]
@@ -58,7 +59,7 @@ RichTextLabel/colors/default_color = Color(0, 0.662745, 0.498039, 1)
 RichTextLabel/font_sizes/bold_font_size = 16
 RichTextLabel/font_sizes/normal_font_size = 14
 RichTextLabel/fonts/bold_font = ExtResource("1_rbcnv")
-RichTextLabel/fonts/italics_font = ExtResource("2_ktccg")
+RichTextLabel/fonts/italics_font = ExtResource("2_e6phw")
 RichTextLabel/fonts/normal_font = ExtResource("3_ijrhk")
 RichTextLabel/styles/normal = SubResource("StyleBoxFlat_q24ni")
 VScrollBar/styles/grabber = SubResource("StyleBoxFlat_y6ckt")
@@ -82,9 +83,14 @@ process_mode = 3
 visible = false
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(450, 500)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -225.0
 offset_top = -864.0
-offset_right = 450.0
+offset_right = 225.0
 offset_bottom = -364.0
+grow_horizontal = 2
 pivot_offset = Vector2(288, 328)
 theme = SubResource("Theme_c1q8g")
 alignment = 1
@@ -94,7 +100,8 @@ line_edit = NodePath("LineEdit")
 console_text = NodePath("RichTextLabel")
 target_label = NodePath("LabelTarget")
 viewport = NodePath("..")
-hidden_pos = Vector2(0, -864)
+hidden_pos = Vector2(351, -864)
+visible_pos = Vector2(351, 0)
 show_action = "term"
 hide_action = "term"
 hide_time = 0.1
@@ -127,7 +134,7 @@ text = "[wave]
 -----------------------------------
 [/wave]
 "
-autowrap_mode = 0
+autowrap_mode = 2
 selection_enabled = true
 metadata/_edit_use_anchors_ = true
 

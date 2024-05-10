@@ -1,8 +1,6 @@
 @tool
 extends Control
 
-class_name TweenPanel
-
 @export var start_visible = false 
 
 @export var hidden_pos: Vector2 
@@ -74,7 +72,7 @@ var show_tween: Tween = null
 var hide_tween: Tween = null
 
 signal panel_hidden; 
-signal panel_shown(panel: TweenPanel); 
+signal panel_shown(panel); 
 
 func _ready(): 
 	if !start_visible: 

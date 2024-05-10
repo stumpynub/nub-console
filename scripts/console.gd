@@ -1,5 +1,6 @@
 @tool
-extends TweenPanel
+extends "res://addons/nub-console/scripts/tween_panel.gd"
+
 
 enum completion_context { 
 	int_range, 
@@ -31,11 +32,9 @@ func _ready():
 	line_edit.text_changed.connect(_text_changed)
 	
 	panel_shown.connect(_panel_shown)
-	
 	target_label.text = "target object: " + str(target_object)
 	
 	config()
-	
 	add_default_commands()
 	
 	super()
@@ -43,14 +42,16 @@ func _ready():
 
 func add_default_commands(): 
 	
-	add_command("help", "shows all commands", func() : 
+	add_command("help", "shows all available commands", func() : 
 		add_line("\n")
-		add_line("[b]Commands:[/b]")
+		add_line("[b]Commands:[/b] \n")
 		for cmd in commands: 
-			add_line("[indent]" + str(cmd) + ": " + commands.get(cmd)["description"] + "[/indent]")
+			
+			var str = "[b]%s:[/b] \n [i][color=White]%s[/color][/i]" % [cmd,  commands.get(cmd)["description"]]
+			add_line(str)
 	)
 	
-	add_command("call", "call method on target object", func() : 
+	add_command("call", "args: {method_name} \n call method on target object", func() : 
 		var args = parse_args("call")
 		
 		if args.size() > 0 and target_object.has_method(args[0]): 
@@ -67,7 +68,7 @@ func add_default_commands():
 		set_target_object(get_tree().root)
 	)
 	
-	add_command("echo", "prints given variable of target object to the console", func() : 
+	add_command("printvar", "args: {variable_name} \n prints given variable of target object to the console", func() : 
 		if !target_object is Node: return 
 		var args = parse_args("echo")
 		
@@ -83,7 +84,7 @@ func add_default_commands():
 			add_line("----\\" + "[color=White]" + str(child) + "[/color]")
 	)
 	
-	add_command("cd", "traverse the scene tree", func() : 
+	add_command("cd", "args: {node_name} \n traverse the scene tree", func() : 
 		if !target_object is Node: return 
 		var args = parse_args("cd")
 		
@@ -96,13 +97,13 @@ func add_default_commands():
 			set_target_object(node.get_node(args[0]))
 	)
 	
-	add_command("ts", "sets the timescale", func() : 
+	add_command("tscale", "args: {float} \n sets the timescale", func() : 
 		var args = parse_args("ts")
 		if args.size() > 0: 
 			Engine.time_scale = float(args[0])
 	)
 	
-	add_command("del", "deletes node from the given path", func(): 
+	add_command("del", "args: {node_name} \n deletes node from the given path", func(): 
 		if !target_object is Node: return 
 		var args = parse_args("del")
 		
@@ -115,11 +116,11 @@ func add_default_commands():
 			obj.queue_free()
 	)
 	
-	add_command("rl", "reloads current scene", func(): 
+	add_command("reload", "reloads current scene", func(): 
 		get_tree().reload_current_scene()
 	)
 	
-	add_command("setv", "sets variable on current object", func() : 
+	add_command("setvar", "args: {variable_name} \n sets variable on target object", func() : 
 		var args = parse_args("setv")
 		
 		if args.size() > 1 and target_object.get(args[0]): 
@@ -135,7 +136,7 @@ func add_default_commands():
 		get_tree().quit()
 	) 
 	
-	add_command("lyt", "set console layout", func() : 
+	add_command("layout", "args: {int} \n set console layout 1-15", func() : 
 		var args = parse_args("lyt")
 		
 		if args.size() > 0 and int(args[0]) <= 15 : 
@@ -147,7 +148,7 @@ func add_default_commands():
 			
 	,[], completion_context.int_range)
 	
-	add_command("alpha", "sets transparency", func() : 
+	add_command("alpha", "args: {float} \n sets console transparency", func() : 
 		var args = parse_args("alpha")
 		
 		if args.size() > 0 and float(args[0]) <= 1 and float(args[0]) >= 0.1: 
@@ -157,7 +158,7 @@ func add_default_commands():
 			
 	,[], completion_context.int_range)
 	
-	add_command("camgo", "sets camera position to target node position", func() : 
+	add_command("camgo", "sets viewport camera position to target node position", func() : 
 		
 		var cam3D = get_viewport().get_camera_3d()
 		var cam2D = get_viewport().get_camera_2d()
@@ -168,7 +169,7 @@ func add_default_commands():
 			cam2D.global_position = target_object.global_position
 	)
 	
-	add_command("ownergo", "sets camera owner position to target node position", func() : 
+	add_command("ownergo", "sets viewport camera owner position to target node position", func() : 
 		
 		var cam3D = viewport.get_camera_3d()
 		var cam2D = viewport.get_camera_2d()
@@ -183,6 +184,11 @@ func add_default_commands():
 	add_command("pause", "pause game", func() : 
 		get_tree().paused = !get_tree().paused
 	)
+	add_command("close", "close the console", func() : 
+		hide_panel()
+	)
+	
+	commands.keys().sort()
 	
 	
 func set_target_object(obj: Object): 
@@ -245,6 +251,7 @@ func get_config_value(name, default):
 	return get_cfg().get_value("", name, default) 
 
 func _panel_shown(panel): 
+	print("shown")
 	line_edit.grab_focus.call_deferred()
 
 func _text_changed(text): 
@@ -292,8 +299,6 @@ func _try_completion(ctx=null):
 		1: 
 			var prefix = split[0]
 			
-			commands.keys().sort()
-			
 			for key in commands.keys(): 
 				if key.to_lower().begins_with(prefix.to_lower()) and !line_edit.text.contains(key): 
 					line_edit.text = key
@@ -331,6 +336,7 @@ func _try_completion(ctx=null):
 				return 
 			
 			if split[1] == "": 
+				if target_object.get_child_count() <= 0: return  
 				line_edit.text += "./" + str(target_object.get_child(index).name)
 			else: 
 				for child in target_object.get_children(): 
@@ -352,11 +358,9 @@ func _try_completion(ctx=null):
 func _input(event):
 	super(event)
 	
-	
 	if is_hidden: 
 		return 
 		
 	if event.is_action_pressed("ui_focus_next"): 
 		_try_completion()
-
 
