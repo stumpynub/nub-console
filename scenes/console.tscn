@@ -1,0 +1,159 @@
+[gd_scene load_steps=14 format=3 uid="uid://cbf4kuyrc5686"]
+
+[ext_resource type="FontFile" uid="uid://ddfl11npi2r1t" path="res://addons/nub-console/fonts/MonaspaceNeon-SemiBold.otf" id="1_rbcnv"]
+[ext_resource type="FontFile" uid="uid://bjs8jp0oe76hl" path="res://addons/nub-console/fonts/MonaspaceNeon-LightItalic.otf" id="2_ktccg"]
+[ext_resource type="FontFile" uid="uid://civ2ko045nlcr" path="res://addons/nub-console/fonts/MonaspaceNeon-ExtraLight.otf" id="3_ijrhk"]
+[ext_resource type="FontFile" uid="uid://bpvvgbl2446v8" path="res://addons/nub-console/fonts/MonaspaceNeon-Light.otf" id="4_3ud5r"]
+[ext_resource type="Script" path="res://addons/nub-console/scripts/console.gd" id="5_i00s7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y6ckt"]
+bg_color = Color(0, 0.662745, 0.498039, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h85ny"]
+content_margin_left = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ys6jd"]
+bg_color = Color(0, 0, 0, 0.960784)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0.662745, 0.498039, 0.403922)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q24ni"]
+bg_color = Color(0, 0, 0, 0.960784)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0.662745, 0.498039, 0.403922)
+
+[sub_resource type="Theme" id="Theme_c1q8g"]
+default_font = ExtResource("4_3ud5r")
+HScrollBar/styles/grabber = SubResource("StyleBoxFlat_y6ckt")
+HScrollBar/styles/scroll = SubResource("StyleBoxEmpty_h85ny")
+Label/colors/font_color = Color(0, 0.662745, 0.498039, 1)
+Label/colors/font_outline_color = Color(1, 1, 1, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 0)
+Label/constants/line_spacing = 3
+Label/constants/outline_size = 0
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+Label/constants/shadow_outline_size = 1
+Label/font_sizes/font_size = 18
+LineEdit/colors/caret_color = Color(0, 0.662745, 0.498039, 1)
+LineEdit/colors/font_color = Color(0, 0.662745, 0.498039, 1)
+LineEdit/font_sizes/font_size = 16
+LineEdit/styles/focus = SubResource("StyleBoxFlat_ys6jd")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_ys6jd")
+RichTextLabel/colors/default_color = Color(0, 0.662745, 0.498039, 1)
+RichTextLabel/font_sizes/bold_font_size = 16
+RichTextLabel/font_sizes/normal_font_size = 14
+RichTextLabel/fonts/bold_font = ExtResource("1_rbcnv")
+RichTextLabel/fonts/italics_font = ExtResource("2_ktccg")
+RichTextLabel/fonts/normal_font = ExtResource("3_ijrhk")
+RichTextLabel/styles/normal = SubResource("StyleBoxFlat_q24ni")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_y6ckt")
+VScrollBar/styles/scroll = SubResource("StyleBoxEmpty_h85ny")
+
+[sub_resource type="Gradient" id="Gradient_erxnk"]
+colors = PackedColorArray(0, 0.662745, 0.498039, 0.8, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_d702x"]
+gradient = SubResource("Gradient_erxnk")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pjs2f"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(1920, 1080, 1)
+gravity = Vector3(0, 20, 0)
+color_ramp = SubResource("GradientTexture1D_d702x")
+
+[node name="VBoxContainer" type="VBoxContainer" node_paths=PackedStringArray("line_edit", "console_text", "target_label", "viewport")]
+process_mode = 3
+visible = false
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(450, 500)
+offset_top = -864.0
+offset_right = 450.0
+offset_bottom = -364.0
+pivot_offset = Vector2(288, 328)
+theme = SubResource("Theme_c1q8g")
+alignment = 1
+script = ExtResource("5_i00s7")
+config_path = "res://addons/nub-console/console.cfg"
+line_edit = NodePath("LineEdit")
+console_text = NodePath("RichTextLabel")
+target_label = NodePath("LabelTarget")
+viewport = NodePath("..")
+hidden_pos = Vector2(0, -864)
+show_action = "term"
+hide_action = "term"
+hide_time = 0.1
+hide_transition_type = 5
+show_time = 0.2
+show_ease_type = 1
+show_transition_type = 5
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+clip_children = 2
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+bbcode_enabled = true
+text = "[wave]
+              _                    
+             | |                   
+  _ __  _   _| |__                 
+ | '_ \\| | | | '_ \\                
+ | | | | |_| | |_) |        _      
+ |_| |_|\\__,_|_.__/        | |     
+   ___ ___  _ __  ___  ___ | | ___ 
+  / __/ _ \\| '_ \\/ __|/ _ \\| |/ _ \\
+ | (_| (_) | | | \\__ \\ (_) | |  __/
+  \\___\\___/|_| |_|___/\\___/|_|\\___|
+-----------------------------------
+[color=white]https://github.com/stumpynub[/color]
+
+[color=white]https://twitter.com/nubusvr[/color]
+-----------------------------------
+[/wave]
+"
+autowrap_mode = 0
+selection_enabled = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Parts" type="GPUParticles2D" parent="RichTextLabel"]
+position = Vector2(200, 224)
+amount = 2000
+process_material = SubResource("ParticleProcessMaterial_pjs2f")
+lifetime = 2.0
+
+[node name="LineEdit" type="LineEdit" parent="."]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
+focus_next = NodePath(".")
+focus_previous = NodePath(".")
+focus_mode = 1
+placeholder_text = "type 'help' for more info"
+caret_blink = true
+caret_force_displayed = true
+
+[node name="LabelTarget" type="Label" parent="."]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_ktccg")
+theme_override_font_sizes/font_size = 12
+text = "target object: root:<Window#26021463085>"
+horizontal_alignment = 1
