@@ -1,8 +1,7 @@
 @tool
 extends EditorPlugin
 
-
-func _enter_tree():
+func _enable_plugin():
 	add_autoload_singleton("NubConsole", "res://addons/nub-console/scenes/console.tscn")
 
 func _exit_tree():

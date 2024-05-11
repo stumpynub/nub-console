@@ -1,7 +1,6 @@
 @tool
 extends "res://addons/nub-console/scripts/tween_panel.gd"
 
-
 enum completion_context { 
 	int_range, 
 	float_range,
@@ -374,7 +373,6 @@ func _try_completion(ctx=null):
 					index = 0 
 					
 				split[1] = str(target_object.get_child(index).name)
-				
 				line_edit.text = " ./".join(split)
 			
 	line_edit.caret_column = line_edit.text.length()
