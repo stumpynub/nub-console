@@ -34,11 +34,14 @@ func _ready():
 	panel_shown.connect(_panel_shown)
 	target_label.text = "target object: " + str(target_object)
 	
-	config()
+	if get_cfg() == null: 
+		create_cfg()
+		set_default_configs()
+		
+	config.call_deferred()
 	add_default_commands()
 	
 	super()
-	
 
 func add_default_commands(): 
 	
@@ -136,13 +139,12 @@ func add_default_commands():
 	) 
 	
 	add_command("layout", "args: {int} \n set console layout 1-15", func() : 
-		var args = parse_args("lyt")
+		var args = parse_args("layout")
 		
 		if args.size() > 0 and int(args[0]) <= 15 : 
 			anchors_preset = int(args[0])
-			hidden_pos.x = position.x
 			visible_pos = position
-			
+			set_deferred("hidden_pos", Vector2(position.x, hidden_pos.y))
 			set_config_value("layout", int(args[0]))
 			
 	,[], completion_context.int_range)
@@ -155,7 +157,7 @@ func add_default_commands():
 			show_alpha = float(args[0])
 			set_config_value("alpha", float(args[0]))
 			
-	,[], completion_context.int_range)
+	,[], completion_context.float_range)
 	
 	add_command("camgo", "sets viewport camera position to target node position", func() : 
 		
@@ -189,7 +191,6 @@ func add_default_commands():
 	
 	commands.keys().sort()
 	
-	
 func set_target_object(obj: Object): 
 	target_object = obj
 	target_label.text = "target object: " + str(target_object)
@@ -220,22 +221,31 @@ func add_command(cmd, description, callable: Callable, args=[], ctx=null):
 	commands[cmd] = {
 		"description": description, 
 		"action": callable.bindv(args), 
-		"ctx": ctx
+		"complete_ctx": ctx
 	}
 
 func config(): 
+	size = get_minimum_size()
 	anchors_preset = get_config_value("layout", 0)
 	modulate.a = float(get_config_value("alpha", 0.1))
 	show_alpha = float(get_config_value("alpha", 0.1))
-	hidden_pos.x = position.x
 	visible_pos = position
 	
+	set_deferred("hidden_pos", Vector2(position.x, hidden_pos.y))
+	
+func create_cfg(): 
+	var file = ConfigFile.new()
+	var err = file.load(config_path)
+	
+	if err == ERR_FILE_NOT_FOUND: 
+		file.save(config_path)
+		
 func get_cfg() -> ConfigFile: 
 	var file = ConfigFile.new()
 	var err = file.load(config_path)
 	
 	if err: 
-		print(err)
+		return null
 		
 	return file
 
@@ -243,6 +253,11 @@ func set_config_value(name, value):
 	var file = get_cfg()
 	file.set_value("", name, value)
 	file.save(config_path)
+
+func set_default_configs(): 
+	if get_cfg(): 
+		set_config_value("alpha", 1.0)
+		set_config_value("layout", 0)
 
 func get_config_value(name, default):
 	var file = get_cfg()
@@ -318,8 +333,8 @@ func _try_completion(ctx=null):
 			
 			if !target_object is Node: return 
 			
-			if commands.has(split[0]) and commands.get(split[0]).ctx != null:
-				match commands.get(split[0]).ctx: 
+			if commands.has(split[0]) and commands.get(split[0]).complete_ctx != null:
+				match commands.get(split[0]).complete_ctx: 
 					completion_context.int_range: 
 						var inpt = split[1]
 						var i = 0
@@ -328,6 +343,18 @@ func _try_completion(ctx=null):
 							line_edit.text += str(i)
 						elif int(inpt) >= 0:
 							i = int(inpt) + 1
+							split[1] = str(i)
+							line_edit.text = " ".join(split)
+						line_edit.caret_column = line_edit.text.length()
+						
+					completion_context.float_range: 
+						var inpt = split[1]
+						var i = 0
+						
+						if inpt == "": 
+							line_edit.text += str(i)
+						elif float(inpt) >= 0:
+							i = float(inpt) + 0.1
 							split[1] = str(i)
 							line_edit.text = " ".join(split)
 						line_edit.caret_column = line_edit.text.length()
@@ -341,7 +368,6 @@ func _try_completion(ctx=null):
 					if child.name.to_lower().begins_with(split[1].to_lower()) and child.name != split[1]: 
 						index = child.get_index()
 					elif split[1].trim_prefix("./") == child.name: 
-						
 						index = child.get_index() + 1
 				
 				if index >= target_object.get_children().size(): 
