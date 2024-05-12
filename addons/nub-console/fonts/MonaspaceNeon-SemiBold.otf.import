@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://civ2ko045nlcr"
-path="res://.godot/imported/MonaspaceNeon-ExtraLight.otf-78500f7be02d03f57655024861dc86c4.fontdata"
+uid="uid://ddfl11npi2r1t"
+path="res://.godot/imported/MonaspaceNeon-SemiBold.otf-7769253dc6a8d10d8e96cf2650e19d72.fontdata"
 
 [deps]
 
-source_file="res://addons/nub-console/fonts/MonaspaceNeon-ExtraLight.otf"
-dest_files=["res://.godot/imported/MonaspaceNeon-ExtraLight.otf-78500f7be02d03f57655024861dc86c4.fontdata"]
+source_file="res://addons/addons/nub-console/fonts/MonaspaceNeon-SemiBold.otf"
+dest_files=["res://.godot/imported/MonaspaceNeon-SemiBold.otf-7769253dc6a8d10d8e96cf2650e19d72.fontdata"]
 
 [params]
 
