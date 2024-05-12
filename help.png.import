@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c8ujrcpygxymc"
-path="res://.godot/imported/help.png-21dec0bb754199935c0862da0d9f3ff0.ctex"
+path="res://.godot/imported/help.png-c18f3f37f55567a12ccdb2fe07654aff.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/nub-console/help.png"
-dest_files=["res://.godot/imported/help.png-21dec0bb754199935c0862da0d9f3ff0.ctex"]
+source_file="res://addons/help.png"
+dest_files=["res://.godot/imported/help.png-c18f3f37f55567a12ccdb2fe07654aff.ctex"]
 
 [params]
 
