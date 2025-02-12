@@ -363,19 +363,40 @@ func _try_completion(ctx=null):
 				if target_object.get_child_count() <= 0: return  
 				line_edit.text += "./" + str(target_object.get_child(index).name)
 			else: 
-				for child in target_object.get_children(): 
-					if child.name.to_lower().begins_with(split[1].to_lower()) and child.name != split[1]: 
-						index = child.get_index()
-					elif split[1].trim_prefix("./") == child.name: 
-						index = child.get_index() + 1
-				
+				var completed_path = _complete_child_from_path(split[1], target_object)
+				if completed_path != null:
+					split[1] = completed_path
 				if index >= target_object.get_children().size(): 
 					index = 0 
-					
-				split[1] = str(target_object.get_child(index).name)
-				line_edit.text = " ./".join(split)
+				
+				line_edit.text = " ".join(split)
 			
 	line_edit.caret_column = line_edit.text.length()
+
+func _complete_child_from_path(path: String, node: Node):
+	# Assume all node names before the last are spelt correctly
+	
+	var names = path.split("/")
+	
+	var name_to_complete = names[-1]
+	var all_but_last = names.slice(0, len(names)-1)
+	
+	var object_to_complete_from = node.get_node_or_null("/".join(all_but_last))
+	if object_to_complete_from == null:
+		return path
+	
+	for i in range(0, object_to_complete_from.get_child_count()):
+		var child = object_to_complete_from.get_child(i)
+		
+		## If the name is fully typed, move on to the next child
+		if child.name.to_lower() == name_to_complete.to_lower():
+			i = wrapi(i+1, 0, object_to_complete_from.get_child_count())
+			return "/".join(all_but_last).path_join(object_to_complete_from.get_child(i).name)
+		## Complete the name of the node if it is partially typed
+		if child.name.to_lower().begins_with(name_to_complete.to_lower()):
+			return "/".join(all_but_last).path_join(child.name)
+	
+	return path
 
 func _input(event):
 	super(event)
