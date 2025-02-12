@@ -78,11 +78,19 @@ func add_default_commands():
 			add_line(str(target_object.get(args[0])))
 	)
 	
-	add_command("ls", "list target object's children", func() : 
+	add_command("ls", "args {node_path}?\n list children", func() : 
 		if !target_object is Node: 
-			return  
-	
-		for child in target_object.get_children(true): 
+			return
+		
+		var args = parse_args("ls")
+		var object_to_ls_from = target_object
+		if len(args) > 0 and args[0] is String:
+			var n = target_object.get_node_or_null(args[0])
+			if n == null:
+				return
+			object_to_ls_from = n
+		
+		for child in object_to_ls_from.get_children(true): 
 			add_line("----\\" + "[color=White]" + str(child) + "[/color]")
 	)
 	
